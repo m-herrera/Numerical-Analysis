@@ -1,40 +1,53 @@
-import math
-import sympy
 from sympy import *
-import matplotlib.pyplot as plt
+from Plotter import *
 from sympy.parsing.sympy_parser import parse_expr
+
+
 # improved Ostrowski’s method free from derivatives
-def sne_fd_1(x0, tol, func):
-    x_k = x0
-    n_iter = 0
-    while abs(eval(func)(x_k)) >= tol:
-        y_k = x_k - (2 * eval(func)(x_k) ** 2) / (eval(func)(x_k + eval(func)(x_k)) - eval(func)(x_k - eval(func)(x_k)))
-        z_k = y_k - ((y_k - x_k) * eval(func)(y_k)) / (2 * eval(func)(y_k) - eval(func)(x_k))
-        x_k = z_k - ((y_k - x_k) * eval(func)(z_k)) / (2 * eval(func)(y_k) - eval(func)(x_k))
-        n_iter += 1
-    return x_k, n_iter
-
-#Ostrowski’s method free from derivatives
-def sne_fd_2(x0, tol, func):
-    x_k = x0
-    n_iter = 0
-    while abs(eval(func)(x_k)) >= tol:
-        y_k = x_k - (2 * eval(func)(x_k) ** 2) / (eval(func)(x_k + eval(func)(x_k)) - eval(func)(x_k - eval(func)(x_k)))
-        x_k = x_k - (2 * eval(func)(x_k) ** 2) / (eval(func)(x_k + eval(func)(x_k)) - eval(func)(x_k - eval(func)(x_k))) * (eval(func)(y_k)-eval(func)(x_k))/(2*eval(func)(y_k)-eval(func)(x_k))
-        n_iter += 1
-    return x_k, n_iter
-
-#steffensen's method
-def sne_fd_3(x0, tol, func):
-    x_k = x0
-    n_iter = 0
-    while abs(eval(func)(x_k)) >= tol:
-        x_k = x_k - (eval(func)(x_k) ** 2) / (eval(func)(x_k + eval(func)(x_k)) - eval(func)(x_k))
-        n_iter += 1
-    return x_k, n_iter
+def sne_fd_1(x0, tol, function, graf):
+    variable = Symbol("x")
+    function = sympify(function)
+    f = lambdify(variable, function, "numpy")
+    iteration = 0
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error >= tol:
+        y = x - (2 * f(x) ** 2) / (f(x + f(x)) - f(x - f(x)))
+        z = y - ((y - x) * f(y)) / (2 * f(y) - f(x))
+        x = z - ((y - x) * f(z)) / (2 * f(y) - f(x))
+        iteration += 1
+        error = abs(f(x))
+        errors.append(error)
+    if graf != 0 and graf != 1:
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif graf:
+        plot(errors, "Improved Ostrowski's Method")
+    return x, iteration
 
 
-def sne_fd_4(valorInicial, tolerancia,funcion,graf = 1):
+# steffensen's method
+def sne_fd_2(x0, tol, function, graf):
+    variable = Symbol("x")
+    function = sympify(function)
+    f = lambdify(variable, function, "numpy")
+    iteration = 0
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error >= tol:
+        x = x - (f(x) ** 2) / (f(x + f(x)) - f(x))
+        iteration += 1
+        error = abs(f(x))
+        errors.append(error)
+    if graf != 0 and graf != 1:
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif graf:
+        plot(errors, "Steffensen's Method")
+    return x, iteration
+
+
+def sne_fd_3(valorInicial, tolerancia,funcion,graf = 1):
     x = Symbol('x')
     funcion = parse_expr( funcion)
     iteracion = 0
@@ -53,9 +66,9 @@ def sne_fd_4(valorInicial, tolerancia,funcion,graf = 1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
         plot_f(errors,puntos)
-        
 
-def sne_fd_5(valorInicial,anterior, tolerancia,funcion,graf = 1):
+
+def sne_fd_4(valorInicial,anterior, tolerancia,funcion,graf = 1):
     x = Symbol('x')
     funcion = parse_expr( funcion)
     iteracion = 0
@@ -78,7 +91,7 @@ def sne_fd_5(valorInicial,anterior, tolerancia,funcion,graf = 1):
 
 
 # Jain's method
-def sne_fd_6(x0, tol, funcion, graf=1):
+def sne_fd_5(x0, tol, funcion, graf=1):
     variable = Symbol("x")
     funcion = sympify(funcion)
     iteracion = 0
@@ -105,7 +118,7 @@ def sne_fd_6(x0, tol, funcion, graf=1):
     return x, iteracion
 
 # Zhang's method
-def sne_fd_7(x0, gamma, tol, funcion, graf=1):
+def sne_fd_6(x0, gamma, tol, funcion, graf=1):
     variable = Symbol("x")
     funcion = sympify(funcion)
     iteracion = 0
@@ -139,20 +152,3 @@ def sne_fd_7(x0, gamma, tol, funcion, graf=1):
     elif (graf == 1):
         plot(errors, "Zhang")
     return x, iteracion
-
-
-
-# print(sne_fd_3(-0.5, 0.000001, "lambda x: x**2 - math.e**x-3*x+2"))
-#print(sne_fd_3(2, 0.00000000000001, "lambda x: math.atan(x)"))
-def plot_f(errors,values):
-    plt.plot(values, errors)
-    plt.ylabel("Error")
-    plt.xlabel("Iteraciones")
-    plt.show()
-    
-def plot(errors, title):
-    plt.plot(errors)
-    plt.title(title)
-    plt.ylabel("Error")
-    plt.xlabel("Iteraciones")
-    plt.show()

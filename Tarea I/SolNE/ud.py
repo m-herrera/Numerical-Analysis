@@ -1,47 +1,75 @@
-import sympy
 from sympy import *
-import matplotlib.pyplot as plt
+from Plotter import *
 from sympy.parsing.sympy_parser import parse_expr
-import math
 
 
-#Halley's Method
-def sne_ud_1(x0, tol, func):
-    x = sympy.symbols('x')
-    x_k = x0
-    deriv1 = sympy.diff(eval(func)(x), x)
-    deriv2 = sympy.diff(deriv1, x)
-    n_iter = 0
-    a=0
-    while abs(eval(func)(x_k)) >= tol:
-        Lf = eval(func)(x_k)*deriv2.evalf(subs={x: x_k})/(deriv1.evalf(subs={x: x_k})**2)
-        x_k = x_k - (1 + 0.5 * Lf / (1 - a*Lf)) * eval(func)(x_k) / deriv1.evalf(subs={x: x_k})
-        n_iter += 1
-    return x_k, n_iter
-
-#Chun's Method
-def sne_ud_2(x0, tol, func):
-    x = sympy.symbols('x')
-    x_k = x0
-    deriv1 = sympy.diff(eval(func)(x), x)
-    n_iter = 0
-    while abs(eval(func)(x_k)) >= tol:
-        y_k = x_k - eval(func)(x_k) / deriv1.evalf(subs={x: x_k})
-        x_k = y_k - (eval(func)(x_k) + 2*eval(func)(y_k))/eval(func)(x_k)*eval(func)(y_k) / deriv1.evalf(subs={x: x_k})
-        n_iter += 1
-    return x_k, n_iter
+# Halley's Method
+def sne_ud_1(x0, alpha, tol, function, graf):
+    variable = Symbol("x")
+    function = sympify(function)
+    iteration = 0
+    f = lambdify(variable, function, "numpy")
+    df = lambdify(variable, diff(function, variable), "numpy")
+    d2f = lambdify(variable, diff(function, variable, 2), "numpy")
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error >= tol:
+        Lf = f(x) * d2f(x) / df(x)**2
+        x = x - (1 + Lf / (2 * (1 - alpha * Lf))) * f(x) / df(x)
+        iteration += 1
+        error = abs(f(x))
+        errors.append(error)
+    if graf != 0 and graf != 1:
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif graf:
+        plot(errors, "Halley's Method")
+    return x, iteration
 
 
-def sne_ud_3(x0, tol, func):
-    x = sympy.symbols('x')
-    x_k = x0
-    deriv1 = sympy.diff(eval(func)(x), x)
-    n_iter = 0
-    while abs(eval(func)(x_k)) >= tol:
-        y_k = x_k - eval(func)(x_k) / deriv1.evalf(subs={x: x_k})
-        x_k = y_k - (eval(func)(x_k) + eval(func)(y_k))**2/(eval(func)(x_k)**2-5*eval(func)(y_k)**2) * eval(func)(y_k) / deriv1.evalf(subs={x: x_k})
-        n_iter += 1
-    return x_k, n_iter
+# Chun's Method
+def sne_ud_2(x0, tol, function, graf):
+    variable = Symbol("x")
+    function = sympify(function)
+    iteration = 0
+    f = lambdify(variable, function, "numpy")
+    df = lambdify(variable, diff(function, variable), "numpy")
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error >= tol:
+        y = x - f(x) / df(x)
+        x = y - (f(x) + 2 * f(y)) / f(x) * f(y) / df(x)
+        iteration += 1
+        error = abs(f(x))
+        errors.append(error)
+    if graf != 0 and graf != 1:
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif graf:
+        plot(errors, "Chun's Method")
+    return x, iteration
+
+
+def sne_ud_3(x0, tol, function, graf):
+    variable = Symbol("x")
+    function = sympify(function)
+    iteration = 0
+    f = lambdify(variable, function, "numpy")
+    df = lambdify(variable, diff(function, variable), "numpy")
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error >= tol:
+        y = x - f(x) / df(x)
+        x = y - (f(x) + f(y))**2 / (f(x)**2 - 5 * f(y)**2) * f(y) / df(x)
+        iteration += 1
+        error = abs(f(x))
+        errors.append(error)
+    if graf != 0 and graf != 1:
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif graf:
+        plot(errors, "Nameless Method")
+    return x, iteration
 
 def sne_ud_4(valorInicial, tolerancia,funcion,graf = 1):
     x = Symbol('x')
@@ -87,7 +115,7 @@ def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
-        plot_f(errors,puntos)
+        plot_f(errors, puntos)
 
 
 #Funciones Jasson
@@ -136,16 +164,3 @@ def sne_ud_7(x0, m, tol, funcion, graf=1):
     elif (graf == 1):
         plot(errors, "Dong")
     return x, iteracion
-
-def plot_f(errors,values):
-    plt.plot(values, errors)
-    plt.ylabel("Error")
-    plt.xlabel("Iteraciones")
-    plt.show()
-
-def plot(errors, title):
-    plt.plot(errors)
-    plt.title(title)
-    plt.ylabel("Error")
-    plt.xlabel("Iteraciones")
-    plt.show()
