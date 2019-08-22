@@ -2,6 +2,9 @@ import sympy
 from sympy import *
 import matplotlib.pyplot as plt
 from sympy.parsing.sympy_parser import parse_expr
+import math
+
+
 #Halley's Method
 def sne_ud_1(x0, tol, func):
     x = sympy.symbols('x')
@@ -85,9 +88,64 @@ def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
         plot_f(errors,puntos)
-        
+
+
+#Funciones Jasson
+#Weerakoon and Fernando method
+def sne_ud_6(x0, tol, funcion, graf=1):
+    variable = Symbol("x")
+    funcion = sympify(funcion)
+    iteracion = 0
+    f = lambdify(variable, funcion, "numpy")
+    df = lambdify(variable, diff(funcion, variable), "numpy")
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error > tol and iteracion < 1000:
+        x = x - (2 * f(x))/(df(x) + df(x - f(x)/df(x))) # Revisar division entre 0
+        iteracion += 1
+        error = abs(f(x))
+        errors.append(error)
+
+    if (graf != 0 and graf != 1):
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif (graf == 1):
+        plot(errors, "Weerakoon and Fernando")
+    return x, iteracion
+
+
+# Dong's method
+#Requiere conocer la multiplicidad (m) de la raiz
+def sne_ud_7(x0, m, tol, funcion, graf=1):
+    variable = Symbol("x")
+    funcion = sympify(funcion)
+    iteracion = 0
+    f = lambdify(variable, funcion, "numpy")
+    df = lambdify(variable, diff(funcion, variable), "numpy")
+    x = x0
+    error = abs(f(x))
+    errors = [error]
+    while error > tol and iteracion < 1000:
+        y = x - math.sqrt(m) * f(x) / df(x)
+        x = y - m * ((1 - 1 / math.sqrt(m)) ** (1 - m))  * (f(y) / df(x))
+        iteracion += 1
+        error = abs(f(x))
+        errors.append(error)
+    if (graf != 0 and graf != 1):
+        print("WARNING: graf has two possible values, 1 or 0")
+    elif (graf == 1):
+        plot(errors, "Dong")
+    return x, iteracion
+
 def plot_f(errors,values):
     plt.plot(values, errors)
+    plt.ylabel("Error")
+    plt.xlabel("Iteraciones")
+    plt.show()
+
+def plot(errors, title):
+    plt.plot(errors)
+    plt.title(title)
     plt.ylabel("Error")
     plt.xlabel("Iteraciones")
     plt.show()
