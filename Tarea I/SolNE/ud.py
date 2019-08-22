@@ -130,7 +130,10 @@ def sne_ud_6(x0, tol, funcion, graf=1):
     error = abs(f(x))
     errors = [error]
     while error > tol and iteracion < 1000:
-        x = x - (2 * f(x))/(df(x) + df(x - f(x)/df(x))) # Revisar division entre 0
+        denominadorx = (df(x) + df(x - f(x)/df(x)))
+        if denominadorx == 0:
+            break
+        x = x - (2 * f(x))/ denominadorx
         iteracion += 1
         error = abs(f(x))
         errors.append(error)
@@ -153,9 +156,17 @@ def sne_ud_7(x0, m, tol, funcion, graf=1):
     x = x0
     error = abs(f(x))
     errors = [error]
+
+    if m <= 0:
+        print("ERROR: m must be greater than 0")
+        return None
+
     while error > tol and iteracion < 1000:
-        y = x - math.sqrt(m) * f(x) / df(x)
-        x = y - m * ((1 - 1 / math.sqrt(m)) ** (1 - m))  * (f(y) / df(x))
+        denominador = df(x)
+        if denominador == 0:
+            break
+        y = x - math.sqrt(m) * f(x) / denominador
+        x = y - m * ((1 - 1 / math.sqrt(m)) ** (1 - m))  * (f(y) / denominador)
         iteracion += 1
         error = abs(f(x))
         errors.append(error)
