@@ -49,14 +49,15 @@ def sne_ud_4(valorInicial, tolerancia,funcion,graf = 1):
     derivada = diff(funcion, x)
     while(abs(funcion.subs(x,valorInicial))>=tolerancia):
         if(derivada.subs(x,valorInicial) == 0):
-            print("Error, la derivada llego a ser 0, incumpliendo la condicion de f'(x)!=0")
+            print("Error, the derivative undifined the function, f'(x)==0"
+                  )
         y = valorInicial - funcion.subs(x,valorInicial)/derivada.subs(x,valorInicial)
         valorInicial = N(y - funcion.subs(x,y)/derivada.subs(x,valorInicial))
         puntos.append( valorInicial)
         errors.append(abs(funcion.subs(x,valorInicial)))
         iteracion+=1
-    print("La cantidad de iteraciones fueron: " + str(iteracion))
-    print("La aproximacion fue de: " +str(valorInicial))
+    print("The number of iterations is: " + str(iteracion))
+    print("With an aproximation of: " +str(valorInicial))
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
@@ -72,14 +73,14 @@ def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
     derivada = diff(funcion, x)
     while(abs(N(funcion.subs(x,valorInicial)))>=tolerancia):
         if(derivada.subs(x,valorInicial) == 0):
-            print("Error, la derivada llego a ser 0, incumpliendo la condicion de f'(x)!=0")
+            print("Error, the derivative undifined the function, f'(x)==0")
         divisor = N(derivada.subs(x,valorInicial-(1/2) * funcion.subs(x,valorInicial)/derivada.subs(x,valorInicial)))
         valorInicial = N(valorInicial - funcion.subs(x,valorInicial)/divisor)
         puntos.append(valorInicial)
         errors.append(abs(funcion.subs(x,valorInicial)))
         iteracion+=1
-    print("La cantidad de iteraciones fueron: " + str(iteracion))
-    print("La aproximacion fue de: " +str(valorInicial))
+    print("The number of iterations is: " + str(iteracion))
+    print("With an aproximation of: " +str(valorInicial))
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
