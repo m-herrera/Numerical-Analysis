@@ -1,5 +1,7 @@
 import sympy
-
+from sympy import *
+import matplotlib.pyplot as plt
+from sympy.parsing.sympy_parser import parse_expr
 #Halley's Method
 def sne_ud_1(x0, tol, func):
     x = sympy.symbols('x')
@@ -38,3 +40,53 @@ def sne_ud_3(x0, tol, func):
         n_iter += 1
     return x_k, n_iter
 
+def sne_ud_4(valorInicial, tolerancia,funcion,graf = 1):
+    x = Symbol('x')
+    funcion = parse_expr( funcion)
+    iteracion = 0
+    puntos = []
+    errors = []
+    derivada = diff(funcion, x)
+    while(abs(funcion.subs(x,valorInicial))>=tolerancia):
+        if(derivada.subs(x,valorInicial) == 0):
+            print("Error, la derivada llego a ser 0, incumpliendo la condicion de f'(x)!=0")
+        y = valorInicial - funcion.subs(x,valorInicial)/derivada.subs(x,valorInicial)
+        valorInicial = N(y - funcion.subs(x,y)/derivada.subs(x,valorInicial))
+        puntos.append( valorInicial)
+        errors.append(abs(funcion.subs(x,valorInicial)))
+        iteracion+=1
+    print("La cantidad de iteraciones fueron: " + str(iteracion))
+    print("La aproximacion fue de: " +str(valorInicial))
+    if(graf!= 0 and graf!=1):
+        print("WARNING: graf has two possible values, 1 or 0")
+    if(graf==1):
+        plot_f(errors,puntos)
+
+
+def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
+    x = Symbol('x')
+    funcion = parse_expr( funcion)
+    iteracion = 0
+    puntos = []
+    errors = []
+    derivada = diff(funcion, x)
+    while(abs(N(funcion.subs(x,valorInicial)))>=tolerancia):
+        if(derivada.subs(x,valorInicial) == 0):
+            print("Error, la derivada llego a ser 0, incumpliendo la condicion de f'(x)!=0")
+        divisor = N(derivada.subs(x,valorInicial-(1/2) * funcion.subs(x,valorInicial)/derivada.subs(x,valorInicial)))
+        valorInicial = N(valorInicial - funcion.subs(x,valorInicial)/divisor)
+        puntos.append(valorInicial)
+        errors.append(abs(funcion.subs(x,valorInicial)))
+        iteracion+=1
+    print("La cantidad de iteraciones fueron: " + str(iteracion))
+    print("La aproximacion fue de: " +str(valorInicial))
+    if(graf!= 0 and graf!=1):
+        print("WARNING: graf has two possible values, 1 or 0")
+    if(graf==1):
+        plot_f(errors,puntos)
+        
+def plot_f(errors,values):
+    plt.plot(values, errors)
+    plt.ylabel("Error")
+    plt.xlabel("Iteraciones")
+    plt.show()
