@@ -39,7 +39,11 @@ function [x, iteration] = sne_fd_2(x0, tol, f, graf)
     if graf != 0 && graf != 1
         disp("WARNING: graf has two possible values, 1 or 0");
     elseif graf
-        plot(errors);
+      figure
+      plot(errors);
+      title("FD2")
+      xlabel('Number of iteration') 
+      ylabel('Error') 
     end
 endfunction
  

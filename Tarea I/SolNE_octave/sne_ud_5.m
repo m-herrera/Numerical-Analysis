@@ -23,7 +23,7 @@
 ## Author: kenne <kenne@DESKTOP-RK8LG59>
 ## Created: 2019-08-18
 
-function [iteracion,aproximacion] = sne_ud_5 (funcion, tolerancia, valorInicial,graf=1)
+function [iteracion,aproximacion] = sne_ud_5 (valorInicial, tolerancia, funcion, graf=1)
   syms x;
   funcion = str2func( funcion);
   iteracion = 0;
@@ -41,8 +41,10 @@ function [iteracion,aproximacion] = sne_ud_5 (funcion, tolerancia, valorInicial,
       iteracion+=1;
   endwhile
   aproximacion = valorInicial;
-    if(graf==1)
-    plot(iteraciones,errores)
+  if(graf==1)
+    figure
+    plot(errores);
+    title("UD5")
     xlabel('Number of iteration') 
     ylabel('Error') 
   endif

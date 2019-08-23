@@ -100,11 +100,11 @@ def sne_fd_5(x0, tol, funcion, graf=1):
     error = abs(f(x))
     errors = [error]
     while error > tol and iteracion < 1000:
-        denominadory = (f(x + f(x)) - f(x))
+        denominadory = f(x + f(x)) - f(x)
         if denominadory == 0:
             break;
         y = x - (f(x) ** 2) / denominadory
-        denominadorx = ((f(x + f(x)) - f(x)) * (f(x) - f(y)))
+        denominadorx = (f(x + f(x)) - f(x)) * (f(x) - f(y))
         if denominadorx == 0:
             break;
         x = x - (f(x) ** 3) / denominadorx

@@ -41,6 +41,10 @@ function [x, iteration] = sne_ud_3(x0, tol, f, graf)
     if graf != 0 && graf != 1
         disp("WARNING: graf has two possible values, 1 or 0");
     elseif graf
+        figure
         plot(errors);
+        title("UD3")
+        xlabel('Number of iteration') 
+        ylabel('Error') 
     end
 endfunction

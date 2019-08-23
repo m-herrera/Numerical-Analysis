@@ -23,9 +23,9 @@
 ## Author: kenne <kenne@DESKTOP-RK8LG59>
 ## Created: 2019-08-18
 
-function [iteracion,aproximacion] = sne_fd_3 (funcion, tolerancia, valorInicial,graf=1)
-  syms x;
-    funcion = str2func( funcion);
+function [iteracion, aproximacion] = sne_fd_3 (valorInicial, tolerancia, funcion, graf=1)
+    syms x;
+    funcion = str2func(funcion);
     iteracion = 0;
     errores = [];
     iteraciones = [];
@@ -39,10 +39,12 @@ function [iteracion,aproximacion] = sne_fd_3 (funcion, tolerancia, valorInicial,
     endwhile
     aproximacion = valorInicial;
     if(graf==1)
-    plot(iteraciones,errores)
-    xlabel('Number of iteration') 
-    ylabel('Error') 
-  endif
+      figure
+      plot(errores);
+      title("FD3")
+      xlabel('Number of iteration') 
+      ylabel('Error') 
+    endif
   if(!(graf==1 || graf ==0));
   print("WARNING: graf can only have two values, 0 or 1")
   endif
