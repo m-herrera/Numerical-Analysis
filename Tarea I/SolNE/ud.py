@@ -85,14 +85,14 @@ def sne_ud_4(valorInicial, tolerancia,funcion,graf = 1):
         y = valorInicial - funcion.subs(x,valorInicial)/derivada.subs(x,valorInicial)
         valorInicial = N(y - funcion.subs(x,y)/derivada.subs(x,valorInicial))
         puntos.append( valorInicial)
-        errors.append(abs(funcion.subs(x,valorInicial)))
+        iteraciones.append(abs(funcion.subs(x,valorInicial)))
         iteracion+=1
     print("The number of iterations is: " + str(iteracion))
     print("With an aproximation of: " +str(valorInicial))
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
-        plot_f(errors,puntos)
+        plot_f(iteraciones,puntos)
 
 
 def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
@@ -100,7 +100,7 @@ def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
     funcion = parse_expr( funcion)
     iteracion = 0
     puntos = []
-    errors = []
+    iteraciones = []
     derivada = diff(funcion, x)
     while(abs(N(funcion.subs(x,valorInicial)))>=tolerancia):
         if(derivada.subs(x,valorInicial) == 0):
@@ -108,14 +108,14 @@ def sne_ud_5(valorInicial, tolerancia,funcion,graf = 1):
         divisor = N(derivada.subs(x,valorInicial-(1/2) * funcion.subs(x,valorInicial)/derivada.subs(x,valorInicial)))
         valorInicial = N(valorInicial - funcion.subs(x,valorInicial)/divisor)
         puntos.append(valorInicial)
-        errors.append(abs(funcion.subs(x,valorInicial)))
+        iteraciones.append(iteracion)
         iteracion+=1
     print("The number of iterations is: " + str(iteracion))
     print("With an aproximation of: " +str(valorInicial))
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
-        plot_f(errors, puntos)
+        plot_f(iteraciones, puntos)
 
 
 #Funciones Jasson
