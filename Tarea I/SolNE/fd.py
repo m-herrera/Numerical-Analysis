@@ -52,20 +52,20 @@ def sne_fd_3(valorInicial, tolerancia,funcion,graf = 1):
     funcion = parse_expr( funcion)
     iteracion = 0
     puntos = []
-    errors = []
+    iteraciones = []
     while(abs(N(funcion.subs(x,valorInicial)))>=tolerancia):
         w= N(valorInicial + funcion.subs(x,valorInicial))
         divisor = N((funcion.subs(x,valorInicial) - funcion.subs(x,w))/(valorInicial-w))
         valorInicial =N( valorInicial - funcion.subs(x,valorInicial)/divisor)
+        iteraciones.append(iteracion)
         iteracion+=1
-        errors.append(abs(funcion.subs(x,valorInicial)))
         puntos.append(valorInicial)
     print("The number of iterations is: " + str(iteracion))
     print("With an aproximation of: " +str(valorInicial))
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
-        plot_f(errors,puntos)
+        plot_f(iteraciones,puntos)
 
 
 def sne_fd_4(valorInicial,anterior, tolerancia,funcion,graf = 1):
@@ -73,21 +73,21 @@ def sne_fd_4(valorInicial,anterior, tolerancia,funcion,graf = 1):
     funcion = parse_expr( funcion)
     iteracion = 0
     puntos = []
-    errors = []
+    iteraciones = []
     while(abs(N(funcion.subs(x,valorInicial)))>=tolerancia):
         divisor = (funcion.subs(x,anterior)- funcion.subs(x,2*valorInicial-anterior))/(anterior - (2*valorInicial-anterior))
         calculo =N( valorInicial - funcion.subs(x,valorInicial)/divisor)
         anterior = valorInicial
         valorInicial = calculo
+        iteraciones.append(iteracion)
         iteracion+=1
-        errors.append(abs(funcion.subs(x,valorInicial)))
         puntos.append(valorInicial)
     print("The number of iterations is: " + str(iteracion))
     print("With an aproximation of: " +str(valorInicial))
     if(graf!= 0 and graf!=1):
         print("WARNING: graf has two possible values, 1 or 0")
     if(graf==1):
-        plot_f(errors,puntos)
+        plot_f(iteraciones,puntos)
 
 
 # Jain's method
