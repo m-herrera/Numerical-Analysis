@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='SolNE',
-    description='This is my package',
+    description='Aproximacion de solucion para ecuaciones no lineales',
     packages = find_packages(include=['SolNE', 'SolNE.*']),
     version='1.0',
     url='https://github.com/m-herrera/Numerical-Analysis',

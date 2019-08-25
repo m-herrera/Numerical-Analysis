@@ -2,6 +2,7 @@ from sympy import *
 import matplotlib.pyplot as plt
 import math
 
+
 MAX_ITER = 1000
 
 
@@ -11,6 +12,17 @@ def set_max_iter(max_iter):
 
 
 def sne_ud_1(x0, alpha, tol, funcion, graf = 1):
+    """Implementación del método de Halley y variaciones
+    Entradas:
+    -x0: valor inicial de iteración (tipo: numérico real)
+    -alpha: selecciona entre variaciones del metodo, 0 para Chebyshev's, 1/2 para Halley's y 1 para Super-Halley's
+    -tol: tolerancia mínima del error (tipo: numérico real positivo)
+    -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+    -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+    Salidas:
+    -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+    -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+    -Gráfica del error en función del número de iteraciones"""
     iteracion = 0
     x = x0
     try:
@@ -48,6 +60,16 @@ def sne_ud_1(x0, alpha, tol, funcion, graf = 1):
 
 # Chun's Method
 def sne_ud_2(x0, tol, funcion, graf = 1):
+    """Implementación del método de Chun
+    Entradas:
+    -x0: valor inicial de iteración (tipo: numérico real)
+    -tol: tolerancia mínima del error (tipo: numérico real positivo)
+    -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+    -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+    Salidas:
+    -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+    -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+    -Gráfica del error en función del número de iteraciones"""
     iteracion = 0
     x = x0
     try:
@@ -81,43 +103,17 @@ def sne_ud_2(x0, tol, funcion, graf = 1):
             print("Unable to plot errors")
     return x, iteracion
 
-
 def sne_ud_3(x0, tol, funcion, graf = 1):
-    iteracion = 0
-    x = x0
-    try:
-        if tol < 0:
-            print("Error: Tolerance value must be positive\n")
-            return
-        variable = Symbol("x")
-        funcion = sympify(funcion)
-        f = lambdify(variable, funcion, "numpy")
-        df = lambdify(variable, diff(funcion, variable), "numpy")
-        error = abs(f(x))
-        errors = [error]
-        while error >= tol and iteracion < MAX_ITER:
-            y = x - f(x) / df(x)
-            x = y - (f(x) + f(y))**2 / (f(x)**2 - 5 * f(y)**2) * f(y) / df(x)
-            iteracion += 1
-            error = abs(f(x))
-            errors.append(error)
-    except ZeroDivisionError:
-        print("Error: Division by zero\nShowing partial result\n")
-    except OverflowError:
-        print("Error: Iteration overflows due to initial value being too large\nShowing partial result\n")
-    except:
-        print("Error: invalid input\nShowing partial result\n")
-    if graf != 0 and graf != 1:
-        print("WARNING: graf has two possible values, 1 or 0\n")
-    elif graf:
-        try:
-            plot(errors, "Title")  # TODO
-        except:
-            print("Unable to plot errors")
-    return x, iteracion
-
-
-def sne_ud_4(x0, tol, funcion, graf = 1):
+    """Implementación del método de Traub
+    Entradas:
+    -x0: valor inicial de iteración (tipo: numérico real)
+    -tol: tolerancia mínima del error (tipo: numérico real positivo)
+    -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+    -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+    Salidas:
+    -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+    -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+    -Gráfica del error en función del número de iteraciones"""
     iteracion = 0
     x = x0
     try:
@@ -149,13 +145,23 @@ def sne_ud_4(x0, tol, funcion, graf = 1):
         print("WARNING: graf has two possible values, 1 or 0\n")
     elif graf:
         try:
-            plot(errors, "Title")  # TODO
+            plot(errors, "Traub's Method")
         except:
             print("Unable to plot errors")
     return x, iteracion
 
 
-def sne_ud_5(x0, tol, funcion, graf = 1):
+def sne_ud_4(x0, tol, funcion, graf = 1):
+    """Implementación del método de Frontini & Sormani
+    Entradas:
+    -x0: valor inicial de iteración (tipo: numérico real)
+    -tol: tolerancia mínima del error (tipo: numérico real positivo)
+    -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+    -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+    Salidas:
+    -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+    -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+    -Gráfica del error en función del número de iteraciones"""
     iteracion = 0
     x = x0
     try:
@@ -184,14 +190,24 @@ def sne_ud_5(x0, tol, funcion, graf = 1):
         print("WARNING: graf has two possible values, 1 or 0\n")
     elif graf:
         try:
-            plot(errors, "Title")  # TODO
+            plot(errors, "Frontini & Sormani's Method")
         except:
             print("Unable to plot errors")
     return x, iteracion
 
 
 #Weerakoon and Fernando method
-def sne_ud_6(x0, tol, funcion, graf = 1):
+def sne_ud_5(x0, tol, funcion, graf = 1):
+    """Implementación del método de Werakoon y Fernando
+    Entradas:
+    -x0: valor inicial de iteración (tipo: numérico real)
+    -tol: tolerancia mínima del error (tipo: numérico real positivo)
+    -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+    -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+    Salidas:
+    -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+    -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+    -Gráfica del error en función del número de iteraciones"""
     iteracion = 0
     x = x0
     try:
@@ -220,7 +236,7 @@ def sne_ud_6(x0, tol, funcion, graf = 1):
         print("WARNING: graf has two possible values, 1 or 0\n")
     elif graf:
         try:
-            plot(errors, "Weerakoon and Fernando")  # TODO
+            plot(errors, "Weerakoon and Fernando's Method")  # TODO
         except:
             print("Unable to plot errors")
     return x, iteracion
@@ -229,7 +245,18 @@ def sne_ud_6(x0, tol, funcion, graf = 1):
 
 # Dong's method
 # Requiere conocer la multiplicidad (m) de la raiz
-def sne_ud_7(x0, m, tol, funcion, graf = 1):
+def sne_ud_6(x0, m, tol, funcion, graf = 1):
+    """Implementación del método mejorado de Ostrowski libre de derivadas
+    Entradas:
+    -x0: valor inicial de iteración (tipo: numérico real)
+    -m: multiplicidad de la raíz esperada de la función
+    -tol: tolerancia mínima del error (tipo: numérico real positivo)
+    -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+    -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+    Salidas:
+    -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+    -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+    -Gráfica del error en función del número de iteraciones"""
     iteracion = 0
     x = x0
     try:
@@ -266,7 +293,7 @@ def sne_ud_7(x0, m, tol, funcion, graf = 1):
         print("WARNING: graf has two possible values, 1 or 0\n")
     elif graf:
         try:
-            plot(errors, "Dong")
+            plot(errors, "Dong's Method")
         except:
             print("Unable to plot errors")
     return x, iteracion
@@ -278,4 +305,3 @@ def plot(errors, title):
     plt.ylabel("Error")
     plt.xlabel("Iteraciones")
     plt.show()
-
