@@ -48,7 +48,7 @@ function [x, iteration] = sne_ud_2(x0, tol, f, graf)
       disp("Error: Tolerance value must be positive")
       return
     endif
-    while error >= tol
+    while error >= tol && iteration < 1000
         y = x - f(x) / df(x);
         x = y - (f(x) + 2 * f(y)) / f(x) * f(y) / df(x);
         iteration += 1;
