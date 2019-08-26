@@ -13,24 +13,41 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
-
-## -*- texinfo -*- 
-## @deftypefn {} {@var{retval} =} sne_ud_2 (@var{input1}, @var{input2})
-##
-## @seealso{}
-## @end deftypefn
-
 ## Author: mherr <mherr@MSI>
 ## Created: 2019-08-22
 
+## Implementación del método de Chun
+## Entradas:
+## -x0: valor inicial de iteración (tipo: numérico real)
+## -tol: tolerancia mínima del error (tipo: numérico real positivo)
+## -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+## -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+## Salidas:
+## -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+## -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+## -Gráfica del error en función del número de iteraciones
 function [x, iteration] = sne_ud_2(x0, tol, f, graf)
+    pkg load symbolic;
     syms x;
+  try
     f = str2func(f);
+  catch
+    disp("Error: syntax error in the function handle.")
+    disp(lasterr)
+    x = 0;
+    iteration = 0;
+    return
+  end_try_catch
+  try
     df = matlabFunction(diff(f, x));
     iteration = 0;
     x = x0;
     error = abs(f(x));
     errors = [error];
+    if tol < 0
+      disp("Error: Tolerance value must be positive")
+      return
+    endif
     while error >= tol
         y = x - f(x) / df(x);
         x = y - (f(x) + 2 * f(y)) / f(x) * f(y) / df(x);
@@ -38,12 +55,16 @@ function [x, iteration] = sne_ud_2(x0, tol, f, graf)
         error = abs(f(x));
         errors = horzcat(errors, error);
     endwhile
+    catch
+      disp("WARNING: math error. Showing partial result")
+      disp(lasterr)
+    end_try_catch
     if graf != 0 && graf != 1
         disp("WARNING: graf has two possible values, 1 or 0");
     elseif graf
       figure
       plot(errors);
-      title("UD2")
+      title("Chun method")
       xlabel('Number of iteration') 
       ylabel('Error') 
     end

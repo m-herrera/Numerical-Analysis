@@ -1,0 +1,10 @@
+Name: SolNE
+Version: 1.0
+Date: 2019-08-25
+Author: Kenneth Hernandez, Marco Herrera, Jasson Rodriguez
+Maintainer: Kenneth Hernandez, Marco Herrera, Jasson Rodriguez
+Title: Solving Non Linear Equations
+Description: Una herramienta util para encontrar la solución de ecuaciones no lineales.
+Depends: octave (>= 4.0)
+License: GPLv3
+Categories: Derivative free, Using Derivatives
