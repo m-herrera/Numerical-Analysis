@@ -246,7 +246,7 @@ def sne_ud_5(x0, tol, funcion, graf = 1):
 # Dong's method
 # Requiere conocer la multiplicidad (m) de la raiz
 def sne_ud_6(x0, m, tol, funcion, graf = 1):
-    """Implementación del método mejorado de Ostrowski libre de derivadas
+    """Implementación del método de Dong
     Entradas:
     -x0: valor inicial de iteración (tipo: numérico real)
     -m: multiplicidad de la raíz esperada de la función

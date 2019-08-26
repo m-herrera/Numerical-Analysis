@@ -99,7 +99,54 @@ def sne_fd_2(x0, tol, funcion, graf=1):
     return x, iteracion
 
 
+def sne_fd_3(x0, a, tol, funcion, graf=1):
+    """Implementación del método mejorado de Ren
+            Entradas:
+            -x0: valor inicial de iteración (tipo: numérico real)
+            -a: parámetro numérico
+            -tol: tolerancia mínima del error (tipo: numérico real positivo)
+            -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
+            -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
+            Salidas:
+            -Valor aproximado de la solución según tolerancia indicada o hasta que se indefina el procedimiento
+            -Cantidad de iteraciones realizadas según tolerancia indicada o hasta que se indefina el procedimiento
+            -Gráfica del error en función del número de iteraciones"""
+    iteracion = 0
+    x = x0
+    try:
+        if tol < 0:
+            print("Error: Tolerance value must be positive\n")
+            return
+        variable = Symbol("x")
+        funcion = sympify(funcion)
+        f = lambdify(variable, funcion, "numpy")
+        error = abs(f(x))
+        errors = [error]
 
+        def divDif1(x, y):
+            return (f(x) - f(y)) / (x - y)
+
+        while error >= tol and iteracion < MAX_ITER:
+            y = x - (f(x) ** 2) / (f(x + f(x)) - f(x))
+            z = x - (2 * f(x) ** 2) / (f(x + f(x)) - f(x - f(x)))
+            x = y - f(y) / (divDif1(x, y) + divDif1(y, z) - divDif1(x, z) + a * (y - x) * (y - z))
+            iteracion += 1
+            error = abs(f(x))
+            errors.append(error)
+    except ZeroDivisionError:
+        print("Error: Division by zero\nShowing partial result\n")
+    except OverflowError:
+        print("Error: Iteration overflows due to initial value being too large\nShowing partial result\n")
+    except:
+        print("Error: invalid input\nShowing partial result\n")
+    if graf != 0 and graf != 1:
+        print("WARNING: graf has two possible values, 1 or 0\n")
+    elif graf:
+        try:
+            plot(errors, "Ren's Method")
+        except:
+            print("Unable to plot errors")
+    return x, iteracion
 
 
 def sne_fd_4(x0, prev, tol, funcion, graf = 1):
@@ -201,7 +248,7 @@ def sne_fd_6(x0, gamma, tol, funcion, graf = 1):
     """Implementación del método de Zhang
         Entradas:
         -x0: valor inicial de iteración (tipo: numérico real)
-        -gamma:
+        -gamma: parametro numérico
         -tol: tolerancia mínima del error (tipo: numérico real positivo)
         -funcion: función sobre la cual iterar, siguiendo lineamientos de sympy (tipo: cadena de caracteres)
         -graf: bandera para graficar o no el error de la función (tipo: numérico 1 o 0)
