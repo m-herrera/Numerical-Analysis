@@ -25,7 +25,7 @@ function x = relajacion(A, b, w = -1, x0 = -1, tol)
     # Obtener autovalores (Av)
     [~, Av] = eig(inv(D)*(-(L+U)));
     # Calcular w
-    w = 2/(1 + sqrt(1 - max(Av(:))**2))
+    w = 2/(1 + sqrt(1 - max(Av(:))**2));
   endif
   
   M_inv = inv(L + D/w);
