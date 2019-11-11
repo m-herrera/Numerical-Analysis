@@ -104,3 +104,8 @@ venv.bak/
 .mypy_cache/
 
 *.idea
+Tarea I/.DS_Store
+
+Tarea 2/.DS_Store
+
+.DS_Store
