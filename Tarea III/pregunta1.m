@@ -1,4 +1,5 @@
-
+#Script para graficar problema específico de interpolación mediante
+#trazadores cúbicos.
 x = [ -5.0;...
       -4.5;...
       -4.0;...
@@ -48,4 +49,8 @@ scatter(x,y);
 hold on
 ezplot(S);
 axis([-6, 6, -0.4, 1.2]);
+title('Gráfica de interpolación mediante el método del trazador cúbico natural');
+legend({'pares ordenados','Interpolación'},'Location','southwest');
+xlabel('t');
+ylabel('S(t)');
 hold off

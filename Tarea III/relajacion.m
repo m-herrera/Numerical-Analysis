@@ -1,3 +1,18 @@
+
+#Implementación del método iterativo de sobre relajación sucesiva para solución de 
+#sistemas de ecuaciones no lineales.
+#Entradas:
+# -A = Matriz de coeficientes
+# -b = Matriz columna de terminos independientes 
+# -w = constante de iteración, puede ser omitida usando : en cuyo caso será calculado
+# -x0 = vector inicial, puede ser omitido usando : en cuyo caso se utilizarán ceros
+# -tol = tolerancia máxima del error 
+#Salidas: 
+# -x = aproximación de la solución del sistema Ax = b
+#Ejemplo: 
+# x = relajacion([[4 3 0];[3 4 -1];[0 -1 4]], [7;7;-1], :, :, 0.0001)
+# x = relajacion([[4 3 0];[3 4 -1];[0 -1 4]], [7;7;-1], 1, [1.2;1.2;-1.2], 0.0000001)
+
 function x = relajacion(A, b, w = -1, x0 = -1, tol)
   n = length(A);
   
